@@ -13,6 +13,7 @@ export class PollList implements OnInit {
   private pollService = inject(PollService);
   private router = inject(Router);
   protected polls = signal<Poll[]>([]);
+  protected copiedId = signal<string | null>(null);
 
   ngOnInit(): void {
     this.loadPolls();
@@ -22,6 +23,14 @@ export class PollList implements OnInit {
     this.pollService.getAllPolls().subscribe({
       next: polls => this.polls.set(polls),
       error: err => console.error('Failed to load polls', err)
+    });
+  }
+
+  copyLink(pollId: string): void {
+    const link = `${window.location.origin}/polls/${pollId}`;
+    navigator.clipboard.writeText(link).then(() => {
+      this.copiedId.set(pollId);
+      setTimeout(() => this.copiedId.set(null), 2000); // Clear after 2s
     });
   }
 

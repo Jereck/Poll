@@ -1,10 +1,43 @@
-@for (poll of polls$ | async; track poll.id) {
-  <div class="mb-4 p-4 border rounded">
-    <h3 class="text-lg font-semibold">{{ poll.question }}</h3>
-    <ul class="list-disc ml-5 mt-2">
-      @for (option of poll.options; track option.id) {
-        <li>{{ option.text }} — {{ option.voteCount }} votes</li>
-      }
-    </ul>
+<div class="mb-2">
+  <button class="text-green-500 border border-green-500 p-3 rounded-md shadow-xl hover:text-white hover:bg-green-500 cursor-pointer" routerLink="/polls/new">Create a poll</button>
+</div>
+
+@for (poll of polls(); track poll.id) {
+  <div class="mb-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
+    <div class="p-6 border-b border-gray-100">
+      <div class="flex justify-between items-start gap-4">
+        <h3 class="text-xl font-semibold text-gray-900 leading-tight">{{ poll.question }}</h3>
+        <button 
+          class="flex-shrink-0 px-4 py-2 text-sm font-medium text-red-600 bg-red-50 border border-red-200 rounded-lg hover:bg-red-100 hover:border-red-300 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors duration-200" 
+          (click)="delete(poll.id!)">
+          Delete
+        </button>
+      </div>
+    </div>
+    <div class="p-6">
+      <ul class="space-y-3">
+        @for (option of poll.options; track option.id) {
+          <li class="relative overflow-hidden p-3 bg-gray-50 rounded-lg border border-gray-100">
+            <!-- Progress bar background -->
+            <div 
+              class="absolute inset-0 bg-gradient-to-r from-blue-100 to-blue-50 transition-all duration-500 ease-out"
+              [style.width.%]="getPercentage(option.voteCount ?? 0, poll.options)">
+            </div>
+            <!-- Content -->
+            <div class="relative flex items-center justify-between">
+              <span class="text-gray-800 font-medium">{{ option.text }}</span>
+              <div class="flex items-center gap-2">
+                <span class="text-sm font-semibold text-blue-700">
+                  {{ getPercentage(option.voteCount ?? 0, poll.options) }}%
+                </span>
+                <span class="text-sm text-gray-600 bg-white px-3 py-1 rounded-full border">
+                  {{ option.voteCount }} {{ option.voteCount === 1 ? 'vote' : 'votes' }}
+                </span>
+              </div>
+            </div>
+          </li>
+        }
+      </ul>
+    </div>
   </div>
 }

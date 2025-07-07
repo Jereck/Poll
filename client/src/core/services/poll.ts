@@ -21,4 +21,14 @@ export class PollService {
   createPoll(poll: any): Observable<Poll> {
     return this.http.post<Poll>(this.baseUrl + 'polls', poll);
   }
+
+  deletePoll(id: string): Observable<Poll> {
+    return this.http.delete<Poll>(this.baseUrl + 'polls/' + id);
+  }
+
+  vote(pollId: string, optionId: number): Observable<any> {
+    return this.http.post(this.baseUrl + 'polls/' + pollId + '/vote', optionId, {
+      headers: { 'Content-Type': 'application/json' }
+    })
+  }
 }

@@ -1,1 +1,42 @@
-<p>poll-detail works!</p>
+<div *ngIf="poll" class="max-w-xl mx-auto mt-8 p-6 bg-white rounded shadow">
+  <h2 class="text-2xl font-bold mb-4">{{ poll()?.question }}</h2>
+
+  <div *ngIf="!voted(); else results">
+    <div *ngFor="let option of poll()?.options" class="mb-2">
+      <label class="flex items-center space-x-2">
+        <input
+          type="radio"
+          name="option"
+          [value]="option.id"
+          [(ngModel)]="selectedOptionId"
+        />
+        <span>{{ option.text }}</span>
+      </label>
+    </div>
+
+    <button
+      (click)="submitVote()"
+      class="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+    >
+      Submit Vote
+    </button>
+  </div>
+
+  <ng-template #results>
+    <div class="mt-4">
+      <h3 class="font-semibold mb-2">Results:</h3>
+      <div *ngFor="let option of poll()?.options">
+        <div class="flex justify-between">
+          <span>{{ option.text }}</span>
+          <span>{{ option.voteCount }}</span>
+        </div>
+        <div class="w-full bg-gray-200 rounded h-2 mb-2">
+          <div
+            class="bg-blue-500 h-2 rounded"
+            [style.width.%]="getVotePercent(option.voteCount ?? 0)"
+          ></div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>

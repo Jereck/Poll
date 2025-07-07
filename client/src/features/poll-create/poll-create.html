@@ -1,0 +1,10 @@
+<form #pollForm="ngForm" (ngSubmit)="create()">
+  <input 
+    id="question"
+    [(ngModel)]="pollDeets.question"
+    name="question"
+    placeholder="Put your question here"
+    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+  />
+  <button type="submit" class="bg-blue-500 text-white p-3 rounded-lg">Submit</button>
+</form>

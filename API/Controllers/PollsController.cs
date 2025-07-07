@@ -13,7 +13,9 @@ public class PollsController(AppDbContext context) : ControllerBase
   [HttpGet]
   public async Task<ActionResult<List<Poll>>> GetPolls()
   {
-    return await context.Polls.ToListAsync();
+    return await context.Polls
+      .Include(p => p.Options)
+      .ToListAsync();
   }
 
   [HttpGet("{id}")]
